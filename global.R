@@ -18,9 +18,14 @@ data_enquete <- data_enquete %>%
     data_enquete %>% count(A2_statut)
     
 #Suppression des réponses des postes "Autre"
-data_enquete <- data_enquete %>% 
-  filter(!A3_poste == "Autre")
+  data_enquete <- data_enquete %>% 
+    filter(!A3_poste == "Autre")
     #vérification
     data_enquete %>% count(A3_poste)
-    
+
+#Suppression des colonnes commençant par B1       
+    data_enquete <- data_enquete %>%    
+      select(-starts_with("B1"))
+
+#Création de la variable poste
     
