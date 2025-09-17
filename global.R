@@ -22,3 +22,5 @@ data_enquete <- data_enquete %>%
   filter(!A3_poste == "Autre")
     #vérification
     data_enquete %>% count(A3_poste)
+    
+    
