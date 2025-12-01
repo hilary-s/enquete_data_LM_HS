@@ -1,0 +1,151 @@
+.sidebar {
+  background-color: #4169e1; /*couleur du fond de la sidebar*/
+  height: 100vh; /*taille pour figer le bon affichage de la couleur de la sidebar*/
+}
+
+.irs-bar {
+  background-color: #4169e1!important; /*couleur de la barre*/
+  border-color: #4169e1 !important; /* Couleur de la bordure de la barre */
+}
+
+.irs-handle {
+  background-color: #4169e1 !important; /* Couleur de fond des sélecteurs */
+  border-color:#4169e1 !important; /* Couleur de la bordure des sélecteurs */
+}
+
+
+.main-header {
+  background-color: white !important; /* Couleur de fond de la barre du haut */
+}
+
+
+.selectize-input {
+    background-color: #191970  !important; /* Couleur de fond */
+    color:white !important; /* Couleur du texte */
+}
+
+.selectize-dropdown-content {
+    background-color: white !important; /* Couleur de fond */
+    color: black !important; /* Couleur du texte */
+}
+
+
+
+.navbar {
+    background-color:  white !important; /* Couleur de fond */
+    color: black!important; /* Couleur du texte */
+}
+
+.content-wrapper {
+    background-color: lightgrey !important; /* Couleur de fond pour la partie au-dessus du sidebar */
+    color:black!important;
+}
+
+.skin-blue .main-header {
+    background-color: white !important; /* Couleur de fond */
+}
+
+.sidebar .btn {
+  background-color: #191970  !important; /* Changer la couleur de fond */
+  border-color: white !important; /* Changer la couleur de la bordure */
+  color: white !important; /* Changer la couleur du texte */
+}
+
+.box-header{
+  background-color: darkgrey !important;
+}
+
+.custom-box {
+  background-color: white; /* Utilisez la couleur de fond de votre choix */
+}
+
+.slider-handle {
+  background-color: white !important;
+  font-weight: bold; /* Épaisseur de la police */
+}
+
+
+.irs-min {
+  background-color: grey !important;
+  color:white !important;
+}
+
+.irs-max {
+  background-color: grey !important;
+  color:white !important;
+}
+
+.irs-single {
+  background-color: white !important;
+  color:black !important;
+}
+
+.irs-from {
+  background-color: white !important;
+  color:black !important;
+}
+
+.irs-to {
+  background-color: white !important;
+  color:black !important;
+}
+
+.title {
+  font-size: 60px !important;
+}
+
+.names {
+  font-size: 24px;
+  margin-top: 40px;
+}
+
+.inner h3 {
+    font-size: 30px; /* Changer la taille du titre des infoboxs*/
+  }
+
+.inner p {
+    font-size: 25px; /* Changer la taille du paragraphe des infoboxs*/
+  }
+
+.small-box.bg-purple {
+            background-color: #191970 !important; /*Couleur de la boite nombre artiste */
+        }
+        
+.small-box.bg-orange {
+            background-color: #191970 !important; /*Couleur de la boite nombre de chansons*/
+        }
+
+.small-box.bg-blue {
+            background-color: #191970 !important; /*Couleur de la boite nombre d'albums*/
+        }
+
+.small-box.bg-green {
+            background-color: #191970 !important; /*Couleur de la boite nombre de playlists*/
+        }
+
+/* Style pour les onglets actifs */
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+    background-color: #191970 ; /* Remplacez your_active_color_here par la couleur de votre choix pour les onglets actifs */
+    color:white; /* Remplacez your_active_text_color_here par la couleur du texte pour les onglets actifs */
+}
+
+/* Style pour les onglets inactifs */
+.nav-tabs > li > a,
+.nav-tabs > li > a:hover,
+.nav-tabs > li > a:focus {
+    background-color:lightgrey; /* Remplacez your_inactive_color_here par la couleur de votre choix pour les onglets inactifs */
+    color: #191970 ; /* Remplacez your_inactive_text_color_here par la couleur du texte pour les onglets inactifs */
+}
+
+/* Style pour les onglets actifs de la sidebar */
+.sidebar-menu > li.active > a {
+  background-color:#191970   !important ;
+  color: white;
+}
+
+.sidebar-menu > li > a {
+  background-color:#4169e1!important ;
+  color: white !important;
+}
