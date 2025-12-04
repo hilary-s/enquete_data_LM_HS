@@ -9,6 +9,11 @@ library(dplyr)
 library(RColorBrewer)
 library(plotly)
 library(ggplot2)
+library(shinydashboard)
+library(shinyWidgets)
+library(DT)
+
+
 
 data_enquete <- read_csv2("Data/enquete_data_raw.csv")
 
@@ -36,6 +41,7 @@ data_enquete <- data_enquete %>%
   )
 
 # Colonnes B2 existantes
+b2_cols <- grep("^B2_", names(data_enquete), value = TRUE)
 b2_cols_existantes <- intersect(b2_cols, names(data_enquete))
 
 # Colonnes à sélectionner pour data_outils
@@ -109,5 +115,3 @@ data_outils[vars_quali_outils] <- lapply(data_outils[vars_quali_outils], functio
   x[is.na(x)] <- "Non renseigné"
   x
 })
-
-
