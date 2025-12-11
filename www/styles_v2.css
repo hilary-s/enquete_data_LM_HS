@@ -108,19 +108,19 @@
   }
 
 .small-box.bg-purple {
-            background-color: #5B95AF !important; /*Couleur de la boite nombre artiste */
+            background-color: #5B95AF !important; /*Couleur de la boite âge moyen */
         }
         
 .small-box.bg-orange {
-            background-color: #5B95AF !important; /*Couleur de la boite nombre de chansons*/
+            background-color: orange !important; /*Couleur de la boite satisfaction*/
         }
 
 .small-box.bg-blue {
-            background-color: #5B95AF !important; /*Couleur de la boite nombre d'albums*/
+            background-color: #5B95AF !important; /*Couleur de la boite effectif total*/
         }
 
 .small-box.bg-green {
-            background-color: #5B95AF !important; /*Couleur de la boite nombre de playlists*/
+            background-color: #5B95AF !important; /*Couleur de la boite expérience moyenne*/
         }
 
 /* Style pour les onglets actifs */
@@ -180,4 +180,9 @@
   border-radius: 15px;
   text-align: center;
 }
+
+.titre-blanc {
+  color: white !important;
+}
+
 

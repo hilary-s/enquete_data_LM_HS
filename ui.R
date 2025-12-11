@@ -33,7 +33,10 @@ ui <- dashboardPage(
                   options = list(`actions-box` = TRUE, `live-search` = TRUE)),
       selectInput("genre", "Genre :", 
                   choices = c("Tous" = "all", "Homme" = "Un homme", "Femme" = "Une femme", "Non précisé" = NA),
-                  selected = "all")
+                  selected = "all"),
+      # Ajouter un bouton pour télécharger le guide utilisateur (PDF)
+      div(style = "position: fixed; bottom: 10px; left: 10px; width: 100%;",
+          downloadButton("download_guide", "Télécharger guide utilisateur", icon = icon("file-pdf")))
     )
   ),
   
@@ -58,7 +61,9 @@ ui <- dashboardPage(
         )),
       
       tabItem(tabName = "tab_données",
-              h2(strong("Extrait des données")),
+              h2(strong("Extrait des données"), class = "titre-blanc"),
+              box(title = strong("Contexte"), width = 12,
+                  div(style = "text-align:center;", a(href = "", tags$img(src = "contexte.png", height = "300px")))),
               box(title = "Nombre de lignes à afficher :", sliderInput("Nblignes", "", min = 2, max = 20, value = 10)),
               box(title = strong("Tableau de données"), DTOutput("tab"), width = 12)
       ),

@@ -12,6 +12,9 @@ library(ggplot2)
 library(shinydashboard)
 library(shinyWidgets)
 library(DT)
+library(jsonlite)
+library(htmltools)
+library(rsconnect)
 
 
 

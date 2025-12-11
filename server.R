@@ -330,5 +330,16 @@ server <- function(input, output, session) {
       )
   })
   
+  # Logique pour télécharger le guide utilisateur (fichier PDF)
+  output$download_guide <- downloadHandler(
+    filename = function() {
+      "guide_utilisateur.pdf"  # Nom du fichier téléchargé
+    },
+    content = function(file) {
+      # Copie le fichier PDF depuis le répertoire www vers l'emplacement de téléchargement
+      file.copy("www/guide.pdf", file)
+    }
+  )
+  
   
 }
