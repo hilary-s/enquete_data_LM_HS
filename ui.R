@@ -41,15 +41,21 @@ ui <- dashboardPage(
     includeCSS("www/styles_v2.css"),
     
     tabItems(
-      tabItem(tabName = "tab_accueil",
-              fluidRow(
-                div(style = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);",
+      tabItem(
+        tabName = "tab_accueil",
+        div(
+          id="accueil_page",
+          fluidRow(
+            div(style = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);",
+                div(class = "overlay-text",
                     p(
                       span("Visualisation et analyse statistique d'une enquête menée auprès des professionnels de la data", class = "title"), br(),
                       span("Morgane LAURENT - Hilary SOM", class = "names"), br(),
-                      span("Master SDD", class = "names"))),
-                img(src = "icone.png", style = "position: absolute; top: 50%; right: 30px; transform: translateY(-50%); height: 150px;")
-              )),
+                      span("Master SDD", class = "names")
+                    )
+                ))
+          )
+        )),
       
       tabItem(tabName = "tab_données",
               h2(strong("Extrait des données")),

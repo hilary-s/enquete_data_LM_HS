@@ -1,16 +1,16 @@
 .sidebar {
-  background-color: #4169e1; /*couleur du fond de la sidebar*/
+  background-color: #01344D; /*couleur du fond de la sidebar*/
   height: 100vh; /*taille pour figer le bon affichage de la couleur de la sidebar*/
 }
 
 .irs-bar {
-  background-color: #4169e1!important; /*couleur de la barre*/
-  border-color: #4169e1 !important; /* Couleur de la bordure de la barre */
+  background-color: #01344D!important; /*couleur de la barre*/
+  border-color: #01344D !important; /* Couleur de la bordure de la barre */
 }
 
 .irs-handle {
-  background-color: #4169e1 !important; /* Couleur de fond des sélecteurs */
-  border-color:#4169e1 !important; /* Couleur de la bordure des sélecteurs */
+  background-color: #01344D !important; /* Couleur de fond des sélecteurs */
+  border-color:#01344D !important; /* Couleur de la bordure des sélecteurs */
 }
 
 
@@ -20,7 +20,7 @@
 
 
 .selectize-input {
-    background-color: #191970  !important; /* Couleur de fond */
+    background-color: #5B95AF  !important; /* Couleur de fond */
     color:white !important; /* Couleur du texte */
 }
 
@@ -46,7 +46,7 @@
 }
 
 .sidebar .btn {
-  background-color: #191970  !important; /* Changer la couleur de fond */
+  background-color: #5B95AF  !important; /* Changer la couleur de fond */
   border-color: white !important; /* Changer la couleur de la bordure */
   color: white !important; /* Changer la couleur du texte */
 }
@@ -108,26 +108,26 @@
   }
 
 .small-box.bg-purple {
-            background-color: #191970 !important; /*Couleur de la boite nombre artiste */
+            background-color: #5B95AF !important; /*Couleur de la boite nombre artiste */
         }
         
 .small-box.bg-orange {
-            background-color: #191970 !important; /*Couleur de la boite nombre de chansons*/
+            background-color: #5B95AF !important; /*Couleur de la boite nombre de chansons*/
         }
 
 .small-box.bg-blue {
-            background-color: #191970 !important; /*Couleur de la boite nombre d'albums*/
+            background-color: #5B95AF !important; /*Couleur de la boite nombre d'albums*/
         }
 
 .small-box.bg-green {
-            background-color: #191970 !important; /*Couleur de la boite nombre de playlists*/
+            background-color: #5B95AF !important; /*Couleur de la boite nombre de playlists*/
         }
 
 /* Style pour les onglets actifs */
 .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:hover,
 .nav-tabs > li.active > a:focus {
-    background-color: #191970 ; /* Remplacez your_active_color_here par la couleur de votre choix pour les onglets actifs */
+    background-color: #5B95AF ; /* Remplacez your_active_color_here par la couleur de votre choix pour les onglets actifs */
     color:white; /* Remplacez your_active_text_color_here par la couleur du texte pour les onglets actifs */
 }
 
@@ -136,16 +136,48 @@
 .nav-tabs > li > a:hover,
 .nav-tabs > li > a:focus {
     background-color:lightgrey; /* Remplacez your_inactive_color_here par la couleur de votre choix pour les onglets inactifs */
-    color: #191970 ; /* Remplacez your_inactive_text_color_here par la couleur du texte pour les onglets inactifs */
+    color: #5B95AF ; /* Remplacez your_inactive_text_color_here par la couleur du texte pour les onglets inactifs */
 }
 
 /* Style pour les onglets actifs de la sidebar */
 .sidebar-menu > li.active > a {
-  background-color:#191970   !important ;
+  background-color:#5B95AF   !important ;
   color: white;
 }
 
 .sidebar-menu > li > a {
-  background-color:#4169e1!important ;
+  background-color:#01344D!important ;
   color: white !important;
 }
+
+/* Image de fond sur la page d'accueil uniquement */
+.content-wrapper {
+  background-image: url('fond2.jpg'); /* Remplacer par le nom exact */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Rendre les box blanches lisibles sur l'image */
+.box {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Titre et noms en blanc et gras */
+#accueil_page .title,
+#accueil_page .names {
+  color: white !important;     /* texte blanc */
+  font-weight: bold !important;/* texte gras */
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8); /* meilleure lisibilité */
+}
+
+
+/*️ Voile sombre derrière le texte d'accueil */
+#accueil_page .overlay-text {
+  background-color: rgba(0,0,0,0.55); /* voile semi-transparent */
+  padding: 40px 60px;
+  border-radius: 15px;
+  text-align: center;
+}
+

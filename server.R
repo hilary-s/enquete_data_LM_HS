@@ -30,13 +30,13 @@ server <- function(input, output, session) {
   output$age_moyen_box <- renderValueBox({
     df <- filtered_data()
     valueBox(value = round(mean(df$age, na.rm = TRUE),1),
-             subtitle = "Âge moyen", icon = icon("birthday-cake"), color = "blue")
+             subtitle = "Âge moyen", icon = icon("birthday-cake"), color = "purple")
   })
   
   output$experience_moy_box <- renderValueBox({
     df <- filtered_data()
     valueBox(value = round(mean(df$experience, na.rm = TRUE),1),
-             subtitle = "Expérience moyenne (ans)", icon = icon("chart-line"), color = "blue")
+             subtitle = "Expérience moyenne (ans)", icon = icon("chart-line"), color = "green")
   })
   
   output$satisfaction_moy_box <- renderValueBox({
@@ -129,13 +129,12 @@ server <- function(input, output, session) {
         teletravail == "Distanciel complet (pas de travail sur site)" ~ 3,
         TRUE ~ NA_real_
       ))
-      ggplot(df, aes(x=teletravail)) +
-        geom_bar(fill="#2c7fb8") +
-        labs(x="Télétravail", y="Effectifs") +
-        theme_minimal() + theme(axis.text.x=element_text(angle=45, hjust=1))
+      ggplot(df, aes(y=score_teletravail)) +
+        geom_boxplot(fill="#5B95AF") +
+        labs(y="Score télétravail") + theme_minimal()
     } else if(question == "experience"){
       ggplot(df, aes(y=experience)) +
-        geom_boxplot(fill="#2c7fb8") +
+        geom_boxplot(fill="#5B95AF") +
         labs(y="Années d'expérience") + theme_minimal()
     }
   })
@@ -149,7 +148,7 @@ server <- function(input, output, session) {
     
     if(var %in% vars_quanti){
       ggplot(df, aes(y=.data[[var]])) +
-        geom_boxplot(fill="#191970") +
+        geom_boxplot(fill="#5B95AF") +
         labs(title=paste("Boxplot de", var), y=var) + theme_minimal()
     } else {
       df <- df %>% mutate(!!var := factor(.data[[var]], levels=names(sort(table(.data[[var]]), decreasing=TRUE))))
@@ -178,19 +177,19 @@ server <- function(input, output, session) {
         ) %>%
         arrange(desc(`Effectif`)) 
       
-        datatable(
-          df_summary,
-          rownames = FALSE,
-          extensions = 'Buttons',
-          options = list(
-            pageLength = 10,
-            dom = 'Bfrtip',
-            buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
-            autoWidth = TRUE,
-            columnDefs = list(list(className = 'dt-center', targets = "_all"))
-          ),
-          class = "cell-border stripe hover compact"
-        )
+      datatable(
+        df_summary,
+        rownames = FALSE,
+        extensions = 'Buttons',
+        options = list(
+          pageLength = 10,
+          dom = 'Bfrtip',
+          buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+          autoWidth = TRUE,
+          columnDefs = list(list(className = 'dt-center', targets = "_all"))
+        ),
+        class = "cell-border stripe hover compact"
+      )
     }
   })
   
@@ -249,7 +248,7 @@ server <- function(input, output, session) {
           geom_boxplot()
       } else {
         p <- ggplot(df, aes(x=.data[[x_var]], y=.data[[y_var]])) +
-          geom_boxplot(fill="#4169e1")
+          geom_boxplot(fill="#2ca25f")
       }
     } else if(!x_is_num && !y_is_num) {
       # Barplot groupé
