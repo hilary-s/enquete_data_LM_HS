@@ -5,7 +5,7 @@ account: wzosdo-morgane-laurent
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 16296755
-bundleId: 11310320
+bundleId: 11310403
 url: https://wzosdo-morgane-laurent.shinyapps.io/projet_enquete_data_LM_HS/
 version: 1
 asMultiple: FALSE

@@ -3,7 +3,7 @@ ui <- dashboardPage(
   dashboardHeader(
     title = tags$div(
       a(href = "", tags$img(src = "icone.png", height = "30px", width = "auto")),
-      "Data Enquête" %>% strong %>% span(),
+      "Enquête Data" %>% strong %>% span(),
       class = "dropdown"
     ),
     titleWidth = "230px"
