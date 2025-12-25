@@ -1,6 +1,5 @@
-############ Import des données ############
+############ Chargement des librairies ############
 library(readr)
-library(dplyr)
 library(tidyr)
 library(stringr)
 library(lubridate)
@@ -16,7 +15,7 @@ library(jsonlite)
 library(htmltools)
 library(rsconnect)
 
-
+############ Import des données ############
 
 data_enquete <- read_csv2("Data/enquete_data_raw.csv")
 
@@ -50,8 +49,9 @@ b2_cols_existantes <- intersect(b2_cols, names(data_enquete))
 # Colonnes à sélectionner pour data_outils
 cols_outils <- c("id", "A2_statut", "A3_poste", "Y1A_genre", b2_cols_existantes)
 
+# Création de data_outils : renommage de colonnes, remise en forme et remplacement des NA par "Jamais".
 data_outils <- data_enquete %>%
-  dplyr::select(all_of(cols_outils)) %>%
+  select(all_of(cols_outils)) %>%
   rename(
     statut = A2_statut,
     poste  = A3_poste,
@@ -75,8 +75,9 @@ cols_classique <- c(
   "Y1B_age", "Y4_diplome", "Y2_region"
 )
 
+# Création de data_classique : sélection des colonnes et renommage, transformation de la date
 data_classique <- data_enquete %>%
-  dplyr::select(all_of(cols_classique)) %>%
+  select(all_of(cols_classique)) %>%
   rename(
     statut        = A2_statut,
     statut_autre  = A2_autre,
@@ -91,7 +92,7 @@ data_classique <- data_enquete %>%
     diplome       = Y4_diplome,
     region        = Y2_region
   ) %>%
-  distinct(id, .keep_all = TRUE) %>%   # une ligne par répondant
+  distinct(id, .keep_all = TRUE) %>%   # une ligne par répondant pour ne pas avoir de doublons
   mutate(
     date = dmy_hm(date),
     date = as.Date(date)
