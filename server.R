@@ -98,8 +98,8 @@ server <- function(input, output, session) {
                       Max = max(experience, na.rm=TRUE)
                     )
                   }
-    )
-    
+    )    
+
     datatable(tab, options=list(scrollX=TRUE))
   })
   
@@ -217,7 +217,7 @@ server <- function(input, output, session) {
     missing_cols <- dataset_vars[!dataset_vars %in% names(df)]
     if(length(missing_cols) > 0) {
       plot.new()
-      text(0.5, 0.5, paste("Colonne manquante:", paste(missing_cols, collapse=", ")))
+      text(0.5, 0.5, paste("Colonne manquante :", paste(missing_cols, collapse=", ")))
       return()
     }
     
@@ -228,7 +228,7 @@ server <- function(input, output, session) {
       color_var <- NULL
     }
     
-    # Déterminer le type de graphique
+    # Déterminer le type de graphique en fonction des types de variables
     x_is_num <- x_var %in% vars_quanti
     y_is_num <- y_var %in% vars_quanti
     
@@ -293,10 +293,10 @@ server <- function(input, output, session) {
       summarise(label_postes = paste0(poste, ": ", effectif, collapse = "<br>"), 
                 effectif_total = sum(effectif), .groups = "drop")
     
-    # Charger les géométries des régions de France
+    # Charger les coordonnées géographiques des régions de France
     regions_geo <- geojsonio::geojson_read("www/regions.geojson", what = "sp")
     
-    # Joindre les effectifs et labels aux géométries
+    # Joindre les effectifs et labels aux coordonnées géographiques
     regions_geo@data <- regions_geo@data %>%
       left_join(df_region_poste, by = c("nom" = "region")) 
     regions_geo@data$effectif_total[is.na(regions_geo@data$effectif_total)] <- 0
@@ -305,7 +305,7 @@ server <- function(input, output, session) {
     # Palette de couleurs selon l'effectif total
     pal <- colorNumeric(palette = "YlOrRd", domain = regions_geo@data$effectif_total)
     
-    # Carte
+    # Conception de la carte
     leaflet(regions_geo) %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
       addPolygons(
@@ -329,8 +329,8 @@ server <- function(input, output, session) {
         position = "bottomright"
       )
   })
-  
-  # Logique pour télécharger le guide utilisateur (fichier PDF)
+
+  # Téléchargement du guide utilisateur (fichier PDF)
   output$download_guide <- downloadHandler(
     filename = function() {
       "guide_utilisateur.pdf"  # Nom du fichier téléchargé
