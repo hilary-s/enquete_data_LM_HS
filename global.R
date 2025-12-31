@@ -1,4 +1,8 @@
-############ Chargement des librairies ############
+# Global de l'application shiny :
+# Préparation des données pour l'application Shiny
+# Auteurs : Morgane LAURENT, Hilary SOM
+
+############ Chargement des bibliothèques ############
 library(readr)
 library(tidyr)
 library(stringr)
@@ -16,12 +20,10 @@ library(htmltools)
 library(rsconnect)
 
 ############ Import des données ############
-
 data_enquete <- read_csv2("Data/enquete_data_raw.csv")
 
 ############ Traitements et nettoyage des données ############
-
-# Suppression des réponses des étudiants/en recherche d'emploi
+# Suppression des réponses des étudiants et des individus en recherche d'emploi
 data_enquete <- data_enquete %>% 
   filter(!A2_statut %in% c("En recherche d'emploi", "Etudiant (hors alternance / stage)"))
 
@@ -42,32 +44,32 @@ data_enquete <- data_enquete %>%
     )
   )
 
-# Colonnes B2 existantes
+# Identification des colonnes liées aux fréquences d'utilisation des outils (préfixées B2_)
 b2_cols <- grep("^B2_", names(data_enquete), value = TRUE)
 b2_cols_existantes <- intersect(b2_cols, names(data_enquete))
 
 # Colonnes à sélectionner pour data_outils
 cols_outils <- c("id", "A2_statut", "A3_poste", "Y1A_genre", b2_cols_existantes)
 
-# Création de data_outils : renommage de colonnes, remise en forme et remplacement des NA par "Jamais".
+# Création de data_outils :
 data_outils <- data_enquete %>%
-  select(all_of(cols_outils)) %>%
+  select(all_of(cols_outils)) %>%  # sélection des colonnes pertinentes
   rename(
     statut = A2_statut,
     poste  = A3_poste,
     genre  = Y1A_genre
-  ) %>%
+  ) %>%  # renommage pour cohérence
   pivot_longer(
     cols = all_of(b2_cols_existantes),
     names_to = "outil",
     values_to = "frequence"
-  ) %>%
+  ) %>% # pivot_longer pour mettre en format long (outil, fréquence)
   mutate(
-    outil = str_remove(outil, "^B2_frequence_utilisation_"),
-    frequence = replace_na(frequence, "Jamais")
-  )
+    outil = str_remove(outil, "^B2_frequence_utilisation_"),  # nettoyage des noms d'outils
+    frequence = replace_na(frequence, "Jamais") # remplacement des NA par "Jamais"
+  ) 
 
-# Colonnes classiques à garder (hors B2)
+# Sélection des colonnes 'classiques' à garder (hors B2)
 cols_classique <- c(
   "id", "date", "A2_statut", "A2_autre", "A3_poste",
   "A4_secteur", "A4_secteur_autre", "A5_teleravail",
@@ -75,7 +77,11 @@ cols_classique <- c(
   "Y1B_age", "Y4_diplome", "Y2_region"
 )
 
-# Création de data_classique : sélection des colonnes et renommage, transformation de la date
+# Création de data_classique :
+# - sélection et renommage des colonnes pour un usage cohérent dans l'application
+# - suppression des doublons (pour garder une ligne par répondant)
+# - conversion de la colonne 'date' en type Date
+
 data_classique <- data_enquete %>%
   select(all_of(cols_classique)) %>%
   rename(
@@ -99,13 +105,18 @@ data_classique <- data_enquete %>%
   )
 
 # Colonnes qualitatives
+# -> utilisées pour alimenter les menus déroulants et groupements dans l'UI et les analyses
 vars_quali <- c("statut", "statut_autre", "poste", "secteur", "secteur_autre",
                 "teletravail", "genre", "diplome", "region", "outil", "frequence")
 
 # Colonnes quantitatives
+# -> utilisées pour calculs statistiques et analyses
 vars_quanti <- c("id", "experience", "satisfaction", "age")
 
-# --- Remplacement des NA par "Non renseigné" dans les colonnes existantes ---
+# Remplacement des NA par "Non renseigné" dans les colonnes qualitatives
+# -> facilite l'affichage dans les tableaux/graphes
+# -> évite les valeurs manquantes non souhaitées lors des regroupements
+
 # Pour data_classique
 vars_quali_classique <- intersect(vars_quali, names(data_classique))
 data_classique[vars_quali_classique] <- lapply(data_classique[vars_quali_classique], function(x) {

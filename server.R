@@ -1,6 +1,11 @@
+# Serveur de l'application shiny :
+# Définition des réactifs et outputs (tables, graphiques, carte)
+# Gestion du filtrage, des agrégations, des rendus graphiques et et téléchargement du guide utilisateur
+# Auteurs : Morgane LAURENT, Hilary SOM
+
 server <- function(input, output, session) {
-  
-  # --- Filtres principaux réactifs ---
+  # Filtres principaux réactifs appliqués aux datasets
+  # 'filtered_data' : renvoie le dataset principal filtré selon 'statut', 'poste', 'genre'.
   filtered_data <- eventReactive(input$update, {
     req(data_classique)
     df <- data_classique
@@ -9,7 +14,7 @@ server <- function(input, output, session) {
     if (!is.null(input$genre) && !("all" %in% input$genre)) df <- df %>% filter(genre %in% input$genre)
     df
   })
-  
+  # 'filtered_data_outils' : renvoie le dataset des outils filtré selon 'statut', 'poste', 'genre', 'outil'.
   filtered_data_outils <- eventReactive(input$update, {
     req(data_outils)
     df <- data_outils
@@ -19,8 +24,8 @@ server <- function(input, output, session) {
     if (!is.null(input$outil) && length(input$outil) > 0) df <- df %>% filter(outil %in% input$outil)
     df
   })
-  
-  # ValueBoxes
+
+  # Boxes récapitulatives affichant des indicateurs calculés sur le dataset filtré
   output$effectif_total_box <- renderValueBox({
     df <- if(input$stat_question == "outil") filtered_data_outils() else filtered_data()
     n_obs <- if(nrow(df) > 0) n_distinct(df$id) else 0
@@ -47,7 +52,9 @@ server <- function(input, output, session) {
   
   
   
-  # --- Tableau Statistiques ---
+  # Tableau Statistiques selon la question choisie
+  # - Pour 'outil' : calcul d'un score d'utilisation (Jamais = 0, Occasionnellement = 1, Régulièrement = 2)
+  # - Pour 'teletravail' : calcul de score et ajout d'une ligne 'Score moyen'
   output$table_stat <- renderDT({
     req(input$stat_question)
     question <- input$stat_question
@@ -72,10 +79,12 @@ server <- function(input, output, session) {
                         .groups="drop"
                       ) %>% arrange(desc(Effectif_total))
                   },
+
                   "secteur" = {
                     df2 <- df %>% distinct(id, .keep_all = TRUE)
                     df2 %>% count(secteur) %>% mutate(Pourcentage = round(n / sum(n) * 100, 1)) %>% arrange(desc(n))
                   },
+
                   "teletravail" = {
                     df2 <- df %>% distinct(id, .keep_all = TRUE) %>%
                       mutate(score_teletravail = case_when(
@@ -89,6 +98,7 @@ server <- function(input, output, session) {
                     tab <- bind_rows(tab, tibble(teletravail="Score moyen", n=NA, Pourcentage=round(mean(df2$score_teletravail, na.rm=TRUE),2)))
                     tab
                   },
+
                   "experience" = {
                     df2 <- df %>% distinct(id, .keep_all = TRUE)
                     df2 %>% summarise(
@@ -103,7 +113,10 @@ server <- function(input, output, session) {
     datatable(tab, options=list(scrollX=TRUE))
   })
   
-  # --- Graphiques Statistiques ---
+  # Graphiques Statistiques selon la question choisie
+  # - pour 'outil' : barres empilées en pourcentage par fréquence
+  # - pour 'secteur' : barres d'effectif
+  # - pour 'teletravail' et 'experience' : boxplots
   output$plot_stat <- renderPlot({
     req(input$stat_question)
     question <- input$stat_question
@@ -139,7 +152,8 @@ server <- function(input, output, session) {
     }
   })
   
-  # --- Analyse univariée ---
+  # Analyse univariée 
+  # Le dataset est choisi selon la provenance de la variable de 'data_outils' (outil/frequence) ou non.
   output$plot_uni2 <- renderPlot({
     req(input$var_uni2)
     var <- input$var_uni2
@@ -193,10 +207,10 @@ server <- function(input, output, session) {
     }
   })
   
-  # --- Analyse bivariée ---
+  # Analyse bivariée 
+  # Produit un graphique adapté au couple de variables X/Y : scatter, boxplot ou barplot groupé
   output$plot_bi2 <- renderPlot({
-    req(input$x_var2, input$y_var2)
-    
+    req(input$x_var2, input$y_var2)    
     x_var <- input$x_var2
     y_var <- input$y_var2
     color_enable <- input$color_enable2
@@ -228,11 +242,11 @@ server <- function(input, output, session) {
       color_var <- NULL
     }
     
-    # Déterminer le type de graphique en fonction des types de variables
+    # Déterminer le type de graphique en fonction des types de variables (quantitative/qualitative)
     x_is_num <- x_var %in% vars_quanti
     y_is_num <- y_var %in% vars_quanti
     
-    if(x_is_num && y_is_num) {
+    if(x_is_num && y_is_num) { # x et y quantitatives
       # Scatter plot
       p <- if(!is.null(color_var)) {
         ggplot(df, aes(x=.data[[x_var]], y=.data[[y_var]], color=.data[[color_var]])) +
@@ -241,7 +255,7 @@ server <- function(input, output, session) {
         ggplot(df, aes(x=.data[[x_var]], y=.data[[y_var]])) +
           geom_point(alpha=0.7, size=2)
       }
-    } else if(!x_is_num && y_is_num) {
+    } else if(!x_is_num && y_is_num) { # x qualitative, y quantitative
       # Boxplot
       if(!is.null(color_var)) {
         p <- ggplot(df, aes(x=.data[[x_var]], y=.data[[y_var]], fill=.data[[color_var]])) +
@@ -250,7 +264,7 @@ server <- function(input, output, session) {
         p <- ggplot(df, aes(x=.data[[x_var]], y=.data[[y_var]])) +
           geom_boxplot(fill="#2ca25f")
       }
-    } else if(!x_is_num && !y_is_num) {
+    } else if(!x_is_num && !y_is_num) { # x et y qualitatives
       # Barplot groupé
       df[[x_var]] <- as.factor(df[[x_var]])
       df[[y_var]] <- as.factor(df[[y_var]])
@@ -273,15 +287,17 @@ server <- function(input, output, session) {
   
   
   output$tab <- renderDT({
-    # Utiliser le dataset filtré via le bouton Update
+    # Tableau principal : affiche les premières lignes du dataset filtré
+    # Le dataset est actualisé via le bouton 'Update' et limité par 'Nblignes'
     df <- filtered_data()
     
     # Affichage selon le nombre de lignes choisi
     head(df, input$Nblignes)
   })
-  
-  output$map_region <- renderLeaflet({
+
+  # Préparation et conception de la carte par région :
     
+  output$map_region <- renderLeaflet({
     # Dataset filtré selon les inputs
     df <- filtered_data()
     
@@ -296,7 +312,7 @@ server <- function(input, output, session) {
     # Charger les coordonnées géographiques des régions de France
     regions_geo <- geojsonio::geojson_read("www/regions.geojson", what = "sp")
     
-    # Joindre les effectifs et labels aux coordonnées géographiques
+    # Jointure des effectifs et labels aux coordonnées géographiques
     regions_geo@data <- regions_geo@data %>%
       left_join(df_region_poste, by = c("nom" = "region")) 
     regions_geo@data$effectif_total[is.na(regions_geo@data$effectif_total)] <- 0
@@ -340,6 +356,5 @@ server <- function(input, output, session) {
       file.copy("www/guide.pdf", file)
     }
   )
-  
-  
+    
 }
